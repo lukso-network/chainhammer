@@ -163,9 +163,16 @@ def contract_set_via_RPC(contract, arg, hashes = None, privateFor=PRIVATE_FOR, g
                "id"     : 1}
     headers = {'Content-type' : 'application/json'}
     response = requests.post(RPCaddress, json=payload, headers=headers)
-    # print('raw json response: {}'.format(response.json()))
-    tx = response.json()['result']
-        
+    jsonedResponse = response.json()
+
+    if 'result' not in jsonedResponse:
+        print("AHHSFDBAHSDFBSDFHSBDFHBSDFH\n\n\nn\n\n\n\n\n")
+        return
+
+    if 'result' in jsonedResponse:
+        tx = jsonedResponse['result']
+
+
     # print ("[sent directly via RPC]", end=" ") # TODO: not print this here but at start
     print (".", end=" ") # TODO: not print this here but at start
     

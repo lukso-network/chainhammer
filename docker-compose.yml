@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  chainhammer:
+    image: ubuntu:18.04
+    volumes:
+      - /var/app/chainhammer
+    networks:
+      hammer:
+        aliases:
+          - hammer.localhost
+
+networks:
+    hammer:
+        driver: bridge
