@@ -2,9 +2,12 @@ version: "3"
 
 services:
   chainhammer:
-    image: ubuntu:18.04
+    image: silesiacoin/chainhammer:v0.04
+    entrypoint: ["bash", "-c"]
     volumes:
-      - /var/app/chainhammer
+    - ./experiments:/var/app/chainhammer/experiments
+    command:
+      - CH_TXS=3000 CH_THREADING="threaded2 1000" ./run.sh multinet-TestRPC testrpc
     networks:
       hammer:
         aliases:

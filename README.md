@@ -14,6 +14,10 @@ It should work with any Ethereum type chain; we focused on PoA consensus.
 
 ## instructions
 
+## Docker-compose
+Do `docker-compose up` to run.
+Do `docker-compose up --scale chainhammer=2` to scale into 2 instances
+
 ### video
 The brand new release v55 is now presented & explained in a useful [video on youtube](https://www.youtube.com/watch?v=xTYnsfs5U7I).
 
