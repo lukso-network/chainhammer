@@ -17,7 +17,7 @@ if __name__ == '__main__' and __package__ is None:
 ## Dependencies:
 
 # standard library:
-import sys, time, random, json
+import sys, time, random, json, copy
 from threading import Thread
 from queue import Queue
 from pprint import pprint
@@ -163,14 +163,23 @@ def contract_set_via_RPC(contract, arg, hashes = None, privateFor=PRIVATE_FOR, g
                "id"     : 1}
     headers = {'Content-type' : 'application/json'}
     response = requests.post(RPCaddress, json=payload, headers=headers)
-    jsonedResponse = response.json()
+    jsoned_response = response.json()
+    underpriced_tx_err = 'replacement transaction underpriced'
 
-    if 'result' not in jsonedResponse:
-        print("AHHSFDBAHSDFBSDFHSBDFHBSDFH\n\n\nn\n\n\n\n\n")
+    if 'error' in jsoned_response and 'message' in jsoned_response['error'] and underpriced_tx_err == jsoned_response['error']['message']:
+        #  this is quite dumb, but may work
+        new_payload = copy.deepcopy(payload)
+        new_payload['nonce'] = w3.eth.getTransactionCount(w3.eth.defaultAccount, "pending")
+        response = requests.post(RPCaddress, json=new_payload, headers=headers)
+        jsoned_response = response.json()
+        print("tried with nonce, to avoid underpriced tx: ", new_payload, jsoned_response)
+
+    if 'result' not in jsoned_response:
+        print("jsoned_response with error", jsoned_response)
         return
 
-    if 'result' in jsonedResponse:
-        tx = jsonedResponse['result']
+    if 'result' in jsoned_response:
+        tx = jsoned_response['result']
 
 
     # print ("[sent directly via RPC]", end=" ") # TODO: not print this here but at start
@@ -465,7 +474,7 @@ def controlSample_transactionsSuccessful(txs, sampleSize=50, timeout=100):
 ################################################################################
 
 
-def getReceipts_multithreaded_Queue(tx_hashes, timeout, num_worker_threads=8, ifPrint=False):
+def getReceipts_multithreaded_Queue(tx_hashes, timeout, num_worker_threads=8, ifPrint=True):
     """
     Query the RPC via a multithreading Queue, with 8 worker threads.
     Advantage over 'getReceipts_multithreaded': 
@@ -699,5 +708,4 @@ if __name__ == '__main__':
 
     finish(txs, success)
     sys.stdout.flush()
-    
-    
+

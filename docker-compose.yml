@@ -6,8 +6,10 @@ services:
     entrypoint: ["bash", "-c"]
     volumes:
     - ./experiments:/var/app/chainhammer/experiments
+    - ./hammer:/var/app/chainhammer/hammer
+    - ./logs:/var/app/chainhammer/logs
     command:
-      - CH_TXS=3000 CH_THREADING="threaded2 1000" ./run.sh multinet-TestRPC testrpc
+      - CH_TXS=1000 CH_THREADING="threaded2 300" ./run.sh multinet-TestRPC testrpc
     networks:
       hammer:
         aliases:
