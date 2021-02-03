@@ -6,7 +6,18 @@ services:
     entrypoint: ["bash", "-c"]
     volumes:
     - ./experiments:/var/app/chainhammer/experiments
-    - ./hammer:/var/app/chainhammer/hammer
+    - ./results:/var/app/chainhammer/results
+    - ./reader/img/:/var/app/chainhammer/reader/img
+    - ./hammer/__init__.py:/var/app/chainhammer/hammer/__init__.py
+    - ./hammer/clienttools.py:/var/app/chainhammer/hammer/clienttools.py
+    - ./hammer/clienttype.py:/var/app/chainhammer/hammer/clienttype.py
+    - ./hammer/config.py:/var/app/chainhammer/hammer/config.py
+    - ./hammer/contract.sol:/var/app/chainhammer/hammer/contract.sol
+    - ./hammer/deployContract_example_web3.py:/var/app/chainhammer/hammer/deployContract_example_web3.py
+    - ./hammer/is_up.py:/var/app/chainhammer/hammer/is_up.py
+    - ./hammer/send.py:/var/app/chainhammer/hammer/send.py
+    - ./hammer/test_RPC.py:/var/app/chainhammer/hammer/test_RPC.py
+    - ./hammer/tps.py:/var/app/chainhammer/hammer/tps.py
     - ./logs:/var/app/chainhammer/logs
     command:
       - CH_TXS=1000 CH_THREADING="threaded2 300" ./run.sh multinet-TestRPC testrpc
